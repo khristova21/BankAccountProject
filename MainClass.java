@@ -92,24 +92,72 @@ public class MainClass
 				System.out.print("What is your account number?");
 				String accNum = in.nextLine();
 				
+				
 				while(!(MainClass.isNumeric(accNum)))
 				{
 					System.out.print("Sorry that is not a number. Please enter your Account Number:");
 					accNum = in.nextLine();
-				}
-				Integer.parseInt(accNum);
+				}				
 				
 				//ASK TO GET THE ACCOUNT NUMBER IF WHAT IS TYPED IS WRONG
 				//IDENTIFY WITH NAME OF THE ACCOUNT
 				
-			
-				
 				//go through a loop to find the account through the account number
-				for(int i = 0; i < accounts.size();i++)
+				int correctNum = 0;
+
+				if(accounts.size()>= 0)
 				{
-					//if(accNum )
-				}			
-				String checker = null;
+				
+					for(int i = 0; i < accounts.size(); i++)
+					{			
+						if(accounts.get(i).getAccountNumber() == Integer.parseInt(accNum))
+						
+							correctNum = Integer.parseInt(accNum);
+	
+				
+						else
+						{
+							System.out.print("That is an invalid number. You could re-enter your account number(ac) or get your account number by entering your name(name)");
+							String findNum = in.nextLine();
+							
+							while(findNum.equals("ac") == false && findNum.equals("name") == false)
+							{  
+								System.out.print("That is not an option. Either choose to re-enter your number (ac) or use your name (name).");
+								findNum = in.nextLine();
+							}
+							switch(findNum)
+							{
+							case("ac"):
+							{
+							
+								for(int j = 0; j < accounts.size(); j++)
+								{
+									if(accounts.get(j).getAccountNumber() == Integer.parseInt(findNum))
+										correctNum = Integer.parseInt(findNum);
+								}
+								
+							
+							}
+							case("name"):
+							{
+								//USE THE NAME INPUTTED TO FIND THE ACCOUNT NUMBER AND RETURN IT 
+								for(int j = 0; j < accounts.size(); j++)
+								{
+									if(accounts.get(j).getAccountNumber() == Integer.parseInt(findNum))
+										correctNum = Integer.parseInt(findNum);
+								}
+								
+							}
+							
+							
+							}
+						}		
+					}
+				}
+				else
+					System.out.print("There are currently no accounts. You need to make an account first.");
+				
+
 				//for(accNum == checker)
 				/**
 				 * 
@@ -164,7 +212,7 @@ public class MainClass
 						
 						try 
 						{
-							accounts.get(accNum).withdraw(amount);
+							accounts.get(correctNum).withdraw(Double.parseDouble(amount));
 						
 						}
 						catch(IllegalArgumentException e)
