@@ -130,6 +130,15 @@ public class MainClass
 							case("ac"):
 							{
 							
+								System.out.print("Re-enter your account number?");
+								accNum = in.nextLine();
+								while(!(MainClass.isNumeric(accNum)))
+								{
+									System.out.print("Sorry that is not a number. Please enter your Account Number:");
+									accNum = in.nextLine();
+								}				
+								
+							
 								for(int j = 0; j < accounts.size(); j++)
 								{
 									if(accounts.get(j).getAccountNumber() == Integer.parseInt(findNum))
@@ -141,14 +150,17 @@ public class MainClass
 							case("name"):
 							{
 								//USE THE NAME INPUTTED TO FIND THE ACCOUNT NUMBER AND RETURN IT 
+							
+								System.out.print("What is your name?");
+								String name = in.nextLine();
+																
 								for(int j = 0; j < accounts.size(); j++)
 								{
-									if(accounts.get(j).getAccountNumber() == Integer.parseInt(findNum))
-										correctNum = Integer.parseInt(findNum);
+									if(accounts.get(j).getName().equals(name))
+										correctNum  =  accounts.get(j).getAccountNumber();
 								}
-								
+								System.out.print("Your account number is "  + correctNum);
 							}
-							
 							
 							}
 						}		
@@ -216,16 +228,11 @@ public class MainClass
 						
 						}
 						catch(IllegalArgumentException e)
+						//DO NOT REPROMPT JUST SAY IT IS INVALID AND DOES NOT WORK
 						{
 							System.out.print("Sorry you cannot withdraw that amount. Try again");
-							amount = in.nextLine();
-							
-							
-							while(!(MainClass.isNumeric(amount)))
-							{
-								System.out.print("Sorry that is not a number. Please enter your initial deposit:");
-								amount = in.nextLine();
-							}
+							//amount = in.nextLine();
+						
 						}
 						System.out.println("Withdraw: FINISHED");
 						
