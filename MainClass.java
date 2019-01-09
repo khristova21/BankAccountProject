@@ -145,7 +145,6 @@ public class MainClass
 									//USE THE NAME INPUTTED TO FIND THE ACCOUNT NUMBER AND RETURN IT 
 									
 									
-									
 									/**
 									 * enter their name and return each of their accounts 
 									 * and whether it is checking or savings). 
@@ -156,32 +155,26 @@ public class MainClass
 								
 									System.out.print("What is your name?");
 									String name = in.nextLine();
-																	
+									String accountType = "";
 									for(int j = 0; j < accounts.size(); j++)
 									{
 										if(accounts.get(j).getName().equals(name))
 										{
 											correctNum  =  accounts.get(j).getAccountNumber();
 											System.out.print("Your account number is "  + correctNum);
-											
-											
 											//checkingAccount instanceOf bankAccount
 											
+											BankAccount test = accounts.get(correctNum);
 											
-											//idk WHAT TO DO HEREEEEEE!
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
+											if(test instanceof CheckingAccount)
+											{
+												accountType = "Checking Account";
+											}
+											else if(test instanceof SavingsAccount) 
+											{
+												accountType  = "Savings Account";
+											}	
+											System.out.println(accountType);
 										}
 									}
 									if(correctNum == 0)
@@ -231,10 +224,6 @@ public class MainClass
 						//DO NOT REPROMPT JUST SAY IT IS INVALID AND DOES NOT WORK
 						{
 							System.out.print("ERROR: TRANSACTION NOT AUTHORIZED");
-						
-							
-							
-							//DO I NEED A BREAK HERE?????????????
 						}
 						System.out.println("Withdraw: FINISHED");
 					
@@ -292,12 +281,12 @@ public class MainClass
 					
 					while(!(MainClass.isNumeric(otherAccount)) || otherCorrectNum == 0)
 					{
-						System.out.print("That is not a valid existing account number.");
-						
+						System.out.print("That is not a valid existing account number. Please enter the account number of the other acccout: ");
+						otherAccount = in.nextLine();
+					}
 						//DO I NEED TO ASK FOR THE ACCOUNT NUMBER OF THE OTHER ACCOUNT IN THE TRANSFER?????????????????/
 						
-						//otherAccount = in.nextLine();
-					}
+					
 					try
 					{
 						accounts.get(correctNum).transfer(accounts.get(otherCorrectNum), Double.parseDouble(amount));
@@ -318,9 +307,6 @@ public class MainClass
 					
 					
 				}
-				
-				
-				
 				
 				
 			}
