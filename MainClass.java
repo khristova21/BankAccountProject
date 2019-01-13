@@ -293,9 +293,6 @@ public class MainClass
 						String otherAccount = in.nextLine();
 						int otherCorrectNum = 0;
 						
-						
-						//the answer doesnt say its wrong. this is only if its correct
-
 						for(int i = 0; i < accounts.size(); i++)
 						{			
 							if(i + 1 == Integer.parseInt(otherAccount))
@@ -310,9 +307,7 @@ public class MainClass
 						{
 							System.out.print("That is not a valid existing account number. Please enter the account number of the other acccout: ");
 							otherAccount = in.nextLine();
-						}
-							//DO I NEED TO ASK FOR THE ACCOUNT NUMBER OF THE OTHER ACCOUNT IN THE TRANSFER?????????????????/
-							
+						}							
 						
 						try
 						{
@@ -331,12 +326,8 @@ public class MainClass
 							System.out.println(accounts.get(correctNum-1).getName() + ", you have $" + accounts.get(correctNum-1).getBalance() + " in your account.");
 							System.out.println(accounts.get(otherCorrectNum-2).getName() + "'s account now has $" + accounts.get(otherCorrectNum-2).getBalance());
 						}
-						break;
 						
 					}
-						
-						
-						
 						
 						
 					case("get Acc Num"):
