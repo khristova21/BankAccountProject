@@ -93,12 +93,13 @@ public class MainClass
 				String accNum = in.nextLine();
 				int correctNum = 0;
 				
-				while(!(MainClass.isNumeric(accNum)) || Integer.parseInt(accNum) < 0 )
+				while(!(MainClass.isNumeric(accNum)) || Integer.parseInt(accNum) <= 0 )
 				{
 					System.out.print("INVALID. Please enter your Account Number:");
 					accNum = in.nextLine();
 				}				
 				//go through a loop to find the account through the account number
+				boolean incorrectNum = false;
 				boolean cont = true;
 
 				if(accounts.size() > 0)    //there's at least one account
@@ -106,15 +107,16 @@ public class MainClass
 				
 					for(int i = 0; i < accounts.size(); i++)
 					{			
-						if(accounts.get(i).getAccountNumber() == Integer.parseInt(accNum))
+						if(i+1 == Integer.parseInt(accNum))
 						{
-							correctNum = i + 1;//Integer.parseInt(accNum);
+							correctNum = i + 1;
+							incorrectNum = true;
 							System.out.println(accounts.get(i).getName() + ", you have $" + accounts.get(i).getBalance() + " in your account.");
 						}
 					}	
-					while(correctNum == 0)    //for loop has sampled through all the accounts and was not able to find and change to the correct Account Number
+					while(incorrectNum == false)    //for loop has sampled through all the accounts and was not able to find and change to the correct Account Number
 						{
-							System.out.print("That is an invalid number. You could re-enter your account number(ac) or get your account number by entering your name(name)");
+							System.out.print("That is an invalid number. You could re-enter your account number(ac) or get your account number by using your name(name)");
 							String try2 = in.nextLine();
 							
 							while(try2.equals("ac") == false && try2.equals("name") == false)
@@ -122,35 +124,34 @@ public class MainClass
 								System.out.print("INVALD. Choose to re-enter your number(ac) or use your name(name).");
 								try2 = in.nextLine();
 							}
-							boolean found = false;
-							switch(try2)
+							if(try2.equals("ac"))
 							{
-								case("ac"):
-								{
-									while(found) 
+								
+									while(correctNum == 0) 
 									{
 										System.out.print("Re-enter your Account Number:");
 										accNum = in.nextLine();
-										while(!(MainClass.isNumeric(accNum)) || Integer.parseInt(accNum) < 0)
+										while(!(MainClass.isNumeric(accNum)) || Integer.parseInt(accNum) <= 0)
 										{
 											System.out.print("INVALID. Please enter your Account Number:");
 											accNum = in.nextLine();
-										}				
-										
-										
+										}			
 											//go through accounts again
-											for(int j = 0; j < accounts.size(); j++)
+											for(int i = 0; i < accounts.size(); i++)
 											{
-												if(accounts.get(j).getAccountNumber() == Integer.parseInt(accNum))
+												if(i + 1 == Integer.parseInt(accNum))
 												{
-													correctNum = j + 1;//Integer.parseInt(accNum);
-													found = true;
+													correctNum  =  i+1;
+													incorrectNum = true;
+													System.out.println(accounts.get(i).getName() + ", you have $" + accounts.get(i).getBalance() + " in your account.");
 												}
 											}
+											if(incorrectNum == false)
+												System.out.println("That number has not been found.");
 									}
-									break;
+									//break;
 								}
-								case("name"):
+							else if(try2.equals("name"))
 								{
 									//USE THE NAME INPUTTED TO FIND THE ACCOUNT NUMBER AND RETURN IT 
 								
@@ -159,13 +160,14 @@ public class MainClass
 										System.out.print("What is your name?");
 										String name = in.nextLine();
 										String accountType = "";
-											for(int j = 0; j < accounts.size(); j++)
+											for(int i = 0; i < accounts.size(); i++)
 											{
-												if(accounts.get(j).getName().equals(name))
+												if(accounts.get(i).getName().equals(name))
 												{
-													correctNum  =  1 + accounts.get(j).getAccountNumber();
+													correctNum  =  1 + i;
 													
 													BankAccount test = accounts.get(correctNum-1);
+													incorrectNum = true;
 													
 													if(test instanceof CheckingAccount)
 													{
@@ -175,16 +177,14 @@ public class MainClass
 													{
 														accountType  = "Savings Account";
 													}	
-													System.out.println(accounts.get(j).getName() +", your account number is "  +  correctNum + " and it is a " + accountType);
+													System.out.println(accounts.get(i).getName() +", your account number is "  +  correctNum + " and it is a " + accountType);
 												}												
 											}
 											
-											//else
-											//	System.out.println("ERROR: Your name was not found.");
+											if(incorrectNum == false)
+												System.out.println("ERROR: Your name was not found.");
 									}
-										break;
 								}	
-							}
 						}		
 				}
 				else
@@ -215,7 +215,7 @@ public class MainClass
 						
 							System.out.print("How much would you like to withdraw from your acccount?");
 							String amount = in.nextLine();
-							
+							boolean complete = true;
 							
 							while(!(MainClass.isNumeric(amount)))
 							{
@@ -224,18 +224,21 @@ public class MainClass
 							}						
 							try 
 							{
-								accounts.get(correctNum).withdraw(Double.parseDouble(amount));
+								accounts.get(correctNum-1).withdraw(Double.parseDouble(amount));
 							
 							}
 							catch(IllegalArgumentException e)
 							//DO NOT REPROMPT JUST SAY IT IS INVALID AND DOES NOT WORK
 							{
-								System.out.print("ERROR: TRANSACTION NOT AUTHORIZED");
+								System.out.println("ERROR: TRANSACTION NOT AUTHORIZED");
+								complete = false;
 							}
-							System.out.println("Withdraw: COMPLETE");
-							System.out.print(accounts.get(correctNum-1).getName() +", your account number is "  +  correctNum );
-
-						
+							if(complete)
+							{
+								
+								System.out.println("Withdraw: COMPLETE");
+								System.out.println(accounts.get(correctNum-1).getName() +", your balance is now $"  +  accounts.get(correctNum-1).getBalance());
+							}
 							break;
 						}
 					
@@ -244,6 +247,8 @@ public class MainClass
 					{
 						System.out.print("How much would you like to deposit into your acccount?");
 						String amount = in.nextLine();
+						boolean complete = true;
+
 
 						while(!(MainClass.isNumeric(amount)))
 						{
@@ -257,12 +262,15 @@ public class MainClass
 						}
 						catch(IllegalArgumentException e)
 						{
-							System.out.print("ERROR: TRANSACTION NOT AUTHORIZED");
+							System.out.println("ERROR: TRANSACTION NOT AUTHORIZED");
+							complete = false;
 					
 						}
-						System.out.println("Deposit: COMPLETE");
-						System.out.println(accounts.get(correctNum-1).getName() + ", you have $" + accounts.get(correctNum-1).getBalance() + " in your account.");
-
+						if(complete)
+						{
+							System.out.println("Deposit: COMPLETE");
+							System.out.println(accounts.get(correctNum-1).getName() + ", you have $" + accounts.get(correctNum-1).getBalance() + " in your account.");
+						}
 						break;
 					}
 					
@@ -271,6 +279,7 @@ public class MainClass
 					{
 						System.out.print("How much money would you like to transer out from your account?");
 						String amount = in.nextLine();
+						boolean complete = true;
 						
 						while(!(MainClass.isNumeric(amount)))
 						{
@@ -282,15 +291,20 @@ public class MainClass
 						
 						System.out.print("What is the number of the account you'd like to transfer $" + Double.parseDouble(amount)+ " to?" );
 						String otherAccount = in.nextLine();
-						
-						//cycle through accounts to find that number and make sure it is there
 						int otherCorrectNum = 0;
+						
+						
+						//the answer doesnt say its wrong. this is only if its correct
+
 						for(int i = 0; i < accounts.size(); i++)
 						{			
-							if(accounts.get(i).getAccountNumber() == Integer.parseInt(otherAccount))
-							
-								otherCorrectNum = Integer.parseInt(otherAccount);
-						}
+							if(i + 1 == Integer.parseInt(otherAccount))
+							{
+								otherCorrectNum = i + 1;
+								//incorrectNum = true;
+								System.out.println("That is " + accounts.get(i).getName() +"'s account and it currently holds $" + accounts.get(i).getBalance());
+							}
+						}							
 						
 						while(!(MainClass.isNumeric(otherAccount)) || otherCorrectNum == 0)
 						{
@@ -306,29 +320,48 @@ public class MainClass
 						}
 						catch(IllegalArgumentException e)
 						{
-							System.out.print("ERROR: TRANSACTION NOT AUTHORIZED");
+							System.out.println("ERROR: TRANSACTION NOT AUTHORIZED");
+							complete = false;
 
 						}
 
-						System.out.println("Transer: COMPLETE");
-						System.out.println(accounts.get(correctNum-1).getName() + ", you have $" + accounts.get(correctNum -2).getBalance() + " in your account.");
-
+						if(complete)
+						{
+							System.out.println("Transer: COMPLETE");
+							System.out.println(accounts.get(correctNum-1).getName() + ", you have $" + accounts.get(correctNum-1).getBalance() + " in your account.");
+							System.out.println(accounts.get(otherCorrectNum-2).getName() + "'s account now has $" + accounts.get(otherCorrectNum-2).getBalance());
+						}
 						break;
-					}
-						
-						
-						
-						
-						
-					//case("get Acc Num"):
-						
-						
 						
 					}
-					
+						
+						
+						
+						
+						
+					case("get Acc Num"):
+					{
+						System.out.print("What is the name of the account you'd like to find?");
+						String name = in.nextLine();
+						int check = 0;
+						
+						while(check == 0)
+						{
+							for(int i = 0; i < accounts.size(); i++)
+							{
+								if(accounts.get(i).getName().equals(name))
+								{
+									correctNum  =  1 + i;
+									check = 1;
+									//incorrectNum = true;
+									System.out.println("The Account Number of " + accounts.get(i).getName() +" is "  +  correctNum);
+								}		
+							}
+						}
+					}
 					
 				}
-				}
+			}
 				
 			//user wants to terminate
 			else if(input.equals("term"))
@@ -337,7 +370,8 @@ public class MainClass
 				loop = false;
 			}
 		}
-		
+	}
+	
 	}
 	
 	private static boolean isNumeric(String str)
